@@ -9,7 +9,7 @@
 #ifndef SYROPOD_HIGHLEVEL_CONTROLLER_ADMITTANCE_CONTROLLER_H
 #define SYROPOD_HIGHLEVEL_CONTROLLER_ADMITTANCE_CONTROLLER_H
 
-#include "boost/numeric/odeint.hpp"
+#include "simple_rk4.hpp"
 
 #include "model.h"
 #include "parameters_and_states.h"

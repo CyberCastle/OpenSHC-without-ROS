@@ -34,10 +34,15 @@ void AdmittanceController::updateAdmittance(void) {
             double step_time = params_.integrator_step_time.data;
             state_type *admittance_state = leg->getAdmittanceState();
             double virtual_damping = damping * 2 * sqrt(mass * stiffness);
-            boost::numeric::odeint::runge_kutta4<state_type> stepper;
-            integrate_const(stepper, [&](const state_type &x, state_type &dxdt, double /*t*/) {
-                         dxdt[0] = x[1];
-                        dxdt[1] = -force_input / mass - virtual_damping / mass * x[1] - stiffness / mass * x[0]; }, *admittance_state, 0.0, step_time, step_time / 30);
+            SimpleRK4::integrate(
+                [&](const state_type &x, state_type &dxdt, double /*t*/) {
+                    dxdt[0] = x[1];
+                    dxdt[1] = -force_input / mass - virtual_damping / mass * x[1] - stiffness / mass * x[0];
+                },
+                *admittance_state,
+                0.0,
+                step_time,
+                step_time / 30);
 
             // Deadbanding
             double delta = clamped(-(*admittance_state)[0], -0.2, 0.2);
